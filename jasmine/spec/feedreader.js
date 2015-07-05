@@ -32,13 +32,11 @@ $(function() {
          * and that the URL is not empty.
          */
          it('URLs are defined and not empty', function() {
-            var length = allFeeds.length;
 
             //Cycle through and check to make sure that all urls are defined
-            for(var i = 0; i < length; i++) {
-              expect(allFeeds[i].url).toBeDefined();
-              expect(allFeeds[i].url).not.toEqual('');
-            }
+            allFeeds.forEach(function(feed) {
+              expect(feed.url).toBeTruthy();
+            });
          });
 
 
@@ -47,13 +45,11 @@ $(function() {
          * and that the name is not empty.
          */
          it('feed names are defined and not empty', function() {
-            var length = allFeeds.length;
-
             //Cycle through and check to make sure that all urls are defined
-            for(var i = 0; i < length; i++) {
-              expect(allFeeds[i].name).toBeDefined();
-              expect(allFeeds[i].name).not.toEqual('');
-            }
+
+            allFeeds.forEach(function(feed) {
+              expect(feed.name).toBeTruthy();
+            });
          });
     });
 
@@ -92,13 +88,11 @@ $(function() {
 
         beforeEach(function(done) {
             //Clear the feed div to make sure we are not using the previous loadfeed
-            $('.feed').html('');
+            $('.feed').empty();
 
             //Run the loadFeed with different values passed in for each test
             //and wait for it to complete
-            loadFeed(0, function() {
-              done();
-            });
+            loadFeed(0, done);
 
         });
 
@@ -106,14 +100,12 @@ $(function() {
          * function is called and completes its work, and there is at least
          * a single .entry element within the .feed container.
          */
-        it('loadFeed loads a feed', function(done) {
+        it('loadFeed loads a feed', function() {
             //Get the entry's string
             firstEntry = $('.entry').html();
 
             //Make sure the entry isn't undefined or blank
             expect(firstEntry).toBeTruthy();
-
-            done();
         });
     });
 
@@ -122,23 +114,26 @@ $(function() {
         var firstFeed;
 
         beforeEach(function(done) {
-            //Get the first feed for comparison purposes
-            firstFeed = $('.feed').html();
-
             //Clear the feed div to make sure we are not using the previous loadfeed
-            $('.feed').html("");
+            $('.feed').empty();
 
-            //Run the loadFeed with different values passed in for each test
-            //and wait for it to complete
-            loadFeed(1, function() {
-              done();
+            //Run the loadFeed with one value to get
+            loadFeed(0, function() {
+              //Get the first feed for comparison purposes
+              firstFeed = $('.feed').html();
+
+              //Clear the feed div to make sure we are not using the previous loadfeed
+              $('.feed').empty();
+
+              //Run loadFeed again for a comparison
+              loadFeed(1, done);
             });
         });
 
         /* This test ensures that a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
-         it('loadFeed changes a feed', function(done) {
+         it('loadFeed changes a feed', function() {
             //Get the feed's html
             var secondFeed = $('.feed').html();
 
@@ -147,8 +142,6 @@ $(function() {
 
             //Make sure the entry does not equal the previous entry
             expect(secondFeed).not.toEqual(firstFeed);
-
-            done();
         });
 
    });
